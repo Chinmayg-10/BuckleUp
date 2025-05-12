@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuckleUp</title>
+    <link rel="icon" type="image/x-icon" href="/faviconLogo.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script src="https://kit.fontawesome.com/b6fe51c8e7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./loginstyle.css">
+</head>
+
+<body>
+    <div id="popup-modal" class="popup-modal">
+        <p id="popup-message"></p>
+    </div>
+    <div class="navbar">
+        <div class="logo"><a href="/"><span class="b">B</span>Buckle<span class="stylize"></span><span class="stylize">Up</span></a></div>
+        <div class="socials">
+            <a href="/signup" class="github-btn"><i class="fa-solid fa-user-plus"></i> SignUp</a>
+            <a href="/todos" class="twitter-btn"><i class="fa-solid fa-notes-medical"></i> Get Started</a>
+        </div>
+    </div>
+    <div class="login-container">
+        <div class="login-section">
+            <div class="login-section-title">
+                <h1>Log In</h1>
+            </div>
+            <div class="form">
+                <span type="text" class="error"><i class="fa-solid fa-circle-exclamation"></i><span id="err"></span></span>
+                <form id="loginForm">
+                    <label class="username" for="loginUsername">Username</label>
+                    <input type="text" placeholder="Enter Username" id="loginUsername" minlength="3" maxlength="20" required>
+
+                    <label class="username" for="loginPass">Password</label>
+                    <div class="password-field">
+                        <input type="password" placeholder="Enter Password" id="loginPass" required>
+                        <span onclick="passwordToggle()" class="show-password-btn"><i id="icon" class="fa-regular fa-eye"></i></span>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+                <button onclick="loginasGuest()" class="guest-btn">Login as Guest</button>
+                <p class="signup-redirect">Aren't a user? <a href="/signup">Signup!</a></p>
+                <p class="logged-redirect">Logged in or signed up already? <a href="/todos"> Get Started!</a></p>
+            </div>
+        </div>
+        <div class="img-container">
+            <img src="/uipreview.jpeg">
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo nav-logo">
+            <div class="logo">
+                <a href="/"><span class="b">B</span>Buckle<span class="stylize"></span><span>Up</span></a>
+            </div>
+        </div>
+        <div class="footer-description">
+            Built with <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/People/Man%20Technologist.png" alt="Man Technologist" width="25" height="25" /> by <span class="creator">Chinmay Gupta</span>, the mind behind <a href="https://imagify-oqo3.vercel.app/" target="_blank" class="CodeCraft">Imagify</a>.
+        </div>
+        <div class="social-icons">
+            <a href="https://github.com/Chinmayg-10" target="_blank"><i class="fa-brands fa-square-github"></i></a>
+            <a href="https://www.linkedin.com/in/chinmayg10/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        let url = "http://localhost:3000";
+
+        function randomUsername() {
+            let username = '';
+            const charOptions = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+            for (let i = 0; i < 8; i++) {
+                username += charOptions[Math.floor(Math.random() * charOptions.length)];
+            }
+            return username;
+        }
+
+        async function login(event) {
+            event.preventDefault(); // Prevent form submission from reloading the page
+
+            let username = document.getElementById("loginUsername").value;
+            if (!isValidUsername(username)) {
+                let label = document.getElementsByClassName("error")[0];
+                label.style.display = "flex";
+                let labeltxt = document.getElementById("err");
+                labeltxt.innerText = "Username can contain only Alphanumeric Characters and Underscore";
+                return;
+            }
+            let pass = document.getElementById("loginPass").value;
+            try {
+                let response = await axios.post(`${url}/login`, {
+                    username,
+                    password: pass
+                });
+                let loginResponseData = response.data;
+                showPopup("Logged In Successfully!!", "success");
+                let token = loginResponseData.token;
+                localStorage.setItem("token", token);
+                window.location.href = '/todos'; // Handle the redirect here
+            } catch (e) {
+                let label = document.getElementsByClassName("error")[0];
+                label.style.display = "flex";
+                let labeltxt = document.getElementById("err");
+                labeltxt.innerText = e.response.data.message;
+            }
+        }
+
+        async function loginasGuest() {
+            let username = randomUsername();
+            let name = "Guest";
+            let pass = "123";
+            try {
+                let response = await axios.post(`${url}/signup`, {
+                    username: username,
+                    name: name,
+                    password: pass
+                });
+                let signupStatus = response.data;
+                showPopup("Logged In Successfully!!", "success");
+                localStorage.setItem("token", signupStatus.token);
+                window.location.href = "/todos"; // Handle the redirect here
+            } catch (e) {
+                let label = document.getElementsByClassName("error")[0];
+                label.style.display = "flex";
+                let labeltxt = document.getElementById("err");
+                labeltxt.innerText = e.response.data.message;
+            }
+        }
+
+        function passwordToggle() {
+            let passwordInput = document.getElementById("loginPass");
+            let icon = document.getElementById("icon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.add("fa-eye-slash");
+                icon.classList.remove("fa-eye");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.add("fa-eye");
+                icon.classList.remove("fa-eye-slash");
+            }
+        }
+
+        function isValidUsername(username) {
+            const regex = /^[a-zA-Z0-9_]+$/;
+            return regex.test(username);
+        }
+
+        function showPopup(message, type = 'success') {
+            let popupModal = document.getElementById('popup-modal');
+            let popupMessage = document.getElementById('popup-message');
+
+            if (type === 'error') {
+                popupMessage.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color: #dc3545"></i>   ${message}`;
+            } else {
+                popupMessage.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #05a571"></i>   ${message}`;
+            }
+
+            popupModal.classList.add('show');
+            setTimeout(() => {
+                popupModal.classList.add('fade-out');
+            }, 2000);
+
+            setTimeout(() => {
+                popupModal.classList.remove('show', 'fade-out');
+            }, 3000);
+        }
+
+        // Attach login function to the form submit
+        document.getElementById("loginForm").addEventListener("submit", login);
+    </script>
+</body>
+
+</html>
+
+
