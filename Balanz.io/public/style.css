@@ -101,13 +101,13 @@ body {
   font-size: 1rem;
 }
 
-.twitter-btn{
+.linkedIn-btn{
   color: #fffdf9;
   background-color: #ff4f00;
   border: 1px solid #ff4f00;
   /* font-weight: 00; */
 }
-.twitter-btn:hover{
+.linkedIn-btn:hover{
   color: #fffdf9;
   background-color: #D24304;
   border: 1px solid #D24304;

@@ -2,14 +2,12 @@ let jwt=require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 const JWT_SECRET= process.env.JWT_SECRET;
-const fs=require("fs");
 const path=require("path");
-const userModel=require("../database/db.js")
+const userModel=require("../database/db")
 
 todoJson=path.join(__dirname,"../database/todos.json");
 
 async function userMiddleware(req, res, next) {
-    // Implement user auth logic
     reqToken=req.headers.authorization;
     if(reqToken){
         try{

@@ -1,4 +1,4 @@
-let url="http://localhost:3000/Balanz.io/public";
+let url="http://localhost:8080";
 let tasks = [];
 
 function capitalize(string) {

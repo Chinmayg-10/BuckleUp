@@ -36,7 +36,6 @@ body {
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
 }
-
 .stylize{
   font-family: "Poppins", sans-serif;
   font-weight: 800;
