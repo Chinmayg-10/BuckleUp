@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const JWT_SECRET= process.env.JWT_SECRET;
 const router = Router();
-const userMiddleware = require("../middleware/user");
+const userMiddleware = require("../middleware/user.js");
 const fs=require("fs");
 const path=require("path");
 const { profile } = require("console");

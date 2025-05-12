@@ -1,5 +1,5 @@
 const { Router } = require("express"); //same as writing const Router= require("express").Router using this router, router is a modular route handler, it allowws to group and organise seperate route handelers from main app instance, and can be mounted over the app instance
-const adminMiddleware = require("../middleware/user");
+const adminMiddleware = require("../middleware/user.js");
 const router = Router(); 
 const fs=require("fs");
 const path=require("path");
