@@ -19,7 +19,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(userRoutes);
-app.use(routes); //this middleware allows acess to  the modular routes i've created
+app.use(routes);
 
 app.get("/healthy", (req, res) => res.send("I am Healthy"));
 
