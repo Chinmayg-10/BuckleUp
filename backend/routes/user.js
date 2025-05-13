@@ -69,7 +69,6 @@ router.post('/signup',async (req, res) => {
      
 
 router.post("/login",async (req,res)=>{
-    // Implement user login logic
     if(req.body.username&&req.body.password){
         let username=req.body.username;
         let userFound=await userModel.findOne({username:username})
@@ -103,7 +102,7 @@ router.post("/login",async (req,res)=>{
 });
 
 router.get('/signup',(req,res)=>{
-    res.sendFile(path.join(__dirname,"../../public/signup.html")); //i'm thinking of taking signups/login on same page and basically changing routs on fe
+    res.sendFile(path.join(__dirname,"../../public/signup.html")); 
 })
 router.get('/login',(req,res)=>{
     res.sendFile(path.join(__dirname,"../../public/login.html"));
@@ -116,10 +115,4 @@ router.get('/todos',  (req, res) => {
 router.get('/',  (req, res) => {
     res.sendFile(path.join(__dirname,"../../public/index.html"));
 });
-
-// router.post('/logout', userMiddleware, (req, res) => {
-//     // Implement logout logic
-//     // no need to do this simply remove token from fe
-// });
-
 module.exports = router
